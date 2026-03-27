@@ -41,27 +41,51 @@
             <div class="col-span-full character-row">
                 
                 <div class="character-item">
-                    <img src="images/batman.png" alt="Batman Image" class="circle-img">
+                    <img src="images/batman.png" 
+                         alt="Batman Image" 
+                         class="circle-img" 
+                         draggable="true" 
+                         data-audio="batman"
+                         data-alt="images/batman2.png">
                     <h2>BATMAN<br><span>(INSTRUMENT #I)</span></h2>
                 </div>
                 
                 <div class="character-item">
-                    <img src="images/cyborg.png" alt="Cyborg Image" class="circle-img">
+                    <img src="images/cyborg.png" 
+                         alt="Cyborg Image" 
+                         class="circle-img" 
+                         draggable="true" 
+                         data-audio="cyborg"
+                         data-alt="images/cyborg2.png">
                     <h2>CYBORG<br><span>(INSTRUMENT #II)</span></h2>
                 </div>
                 
                 <div class="character-item">
-                    <img src="images/superman.png" alt="Superman Image" class="circle-img">
+                    <img src="images/superman.png" 
+                         alt="Superman Image" 
+                         class="circle-img" 
+                         draggable="true" 
+                         data-audio="superman"
+                         data-alt="images/superman2.png">
                     <h2>SUPERMAN<br><span>(INSTRUMENT #III)</span></h2>
                 </div>
                 
                 <div class="character-item">
-                    <img src="images/aquaman.png" alt="Aquaman Image" class="circle-img">
+                    <img src="images/aquaman.png" 
+                         alt="Aquaman Image" 
+                         class="circle-img" 
+                         draggable="true" 
+                         data-audio="aquaman"
+                         data-alt="images/aquaman2.png">
                     <h2>AQUAMAN<br><span>(INSTRUMENT #IV)</span></h2>
                 </div>
                 
                 <div class="character-item">
-                    <img src="images/wonderwoman.png" alt="Wonderwoman Image" class="circle-img">
+                    <img src="images/wonderwoman.png"                alt="Wonderwoman Image" 
+                         class="circle-img" 
+                         draggable="true" 
+                         data-audio="wonderwoman"
+                         data-alt="images/wonderwoman2.png">
                     <h2>WONDERWOMAN<br><span>(INSTRUMENT #V)</span></h2>
                 </div>
 
@@ -72,23 +96,23 @@
         <section class="grid-con center-grid-con">
             <div class="col-span-full slots-row">
                 
-                <div class="white-slot">
+                <div class="white-slot drop-zone">
                     <p>Character Slot<br>#1</p>
                 </div>
                 
-                <div class="white-slot">
+                <div class="white-slot drop-zone">
                     <p>Character Slot<br>#2</p>
                 </div>
                 
-                <div class="white-slot">
+                <div class="white-slot drop-zone">
                     <p>Character Slot<br>#3</p>
                 </div>
                 
-                <div class="white-slot">
+                <div class="white-slot drop-zone">
                     <p>Character Slot<br>#4</p>
                 </div>
                 
-                <div class="white-slot">
+                <div class="white-slot drop-zone">
                     <p>Character Slot<br>#5</p>
                 </div>
 
@@ -129,6 +153,12 @@
             </div>
         </div>
     </footer>
+
+    <audio id="batman" src="audios/batman.mp3" loop></audio>
+    <audio id="cyborg" src="audios/cyborg.mp3" loop></audio>
+    <audio id="superman" src="audios/superman.mp3" loop></audio>
+    <audio id="aquaman" src="audios/aquaman.mp3" loop></audio>
+    <audio id="wonderwoman" src="audios/wonderwoman.mp3" loop></audio>
 
     <script src="js/main.js"></script>
 </body>
