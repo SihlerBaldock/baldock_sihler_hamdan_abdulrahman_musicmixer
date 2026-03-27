@@ -14,6 +14,8 @@ const pauseBtn = buttons[2];
 const volumeBar = document.querySelector(`.volume-bar`);
 const volumeFill = document.querySelector(`.volume-color`);
 
+volumeFill.style.width = "100%";
+
 let draggedItem = null;
 let hasStarted = false;
 let activeAudios = new Set();
@@ -22,9 +24,7 @@ let activeAudios = new Set();
 
 function startAllAudio() {
     allAudio.forEach(audio => {
-        audio.volume = 0;
         audio.loop = true;
-        audio.play();
     });
     hasStarted = true;
 }
@@ -53,9 +53,14 @@ function handleDrop(zone) {
     if (!audio) return;
 
     activeAudios.add(audio);
+    activeAudios.forEach(a => {
+        a.currentTime = 0;
+        a.play();
+    });
 
-    const currentVolume = volumeFill.offsetWidth / volumeBar.offsetWidth;
+    const currentVolume = volumeFill.offsetWidth / volumeBar.offsetWidth || 1;
     audio.volume = currentVolume;
+    audio.play();
 
     if (!hasStarted) {
         startAllAudio();
