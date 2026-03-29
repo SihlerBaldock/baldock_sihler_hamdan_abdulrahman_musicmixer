@@ -5,25 +5,30 @@ console.log("JS File is connected")
 const draggables = document.querySelectorAll(`.circle-img`);
 const dropZones = document.querySelectorAll(`.drop-zone`);
 const allAudio = document.querySelectorAll(`audio`);
-
 const buttons = document.querySelectorAll(`.music-btn`);
 const stopBtn = buttons[0];
 const playBtn = buttons[1];
 const pauseBtn = buttons[2];
-
 const volumeBar = document.querySelector(`.volume-bar`);
 const volumeFill = document.querySelector(`.volume-color`);
-
-volumeFill.style.width = "100%";
 
 let draggedItem = null;
 let hasStarted = false;
 let activeAudios = new Set();
 
 // FUNCTIONS
+volumeFill.style.width = "100%";
+
+function handleDragStart() {
+    draggedItem = this;
+}
+
+function handleZoneDrop() {
+    handleDrop(this);
+}
 
 function startAllAudio() {
-    allAudio.forEach(audio => {
+    activeAudios.forEach(audio => {
         audio.loop = true;
     });
     hasStarted = true;
@@ -33,38 +38,42 @@ function handleDrop(zone) {
     if (!draggedItem) return;
 
     zone.innerHTML = "";
-
     const clone = draggedItem.cloneNode(true);
-
     const altSrc = draggedItem.dataset.alt;
-    if (altSrc) {
-        clone.src = altSrc;
-    }
+    if (altSrc) clone.src = altSrc;
+
     clone.style.width = "100%";
     clone.style.height = "100%";
     clone.style.objectFit = "cover";
-
     clone.removeAttribute("draggable");
-
     zone.appendChild(clone);
 
     const audioId = draggedItem.dataset.audio;
     const audio = document.querySelector(`#${audioId}`);
     if (!audio) return;
 
+    const wasPlaying = [...activeAudios].some(a => !a.paused);
+
     activeAudios.add(audio);
-    activeAudios.forEach(a => {
-        a.currentTime = 0;
-        a.play();
-    });
+    audio.loop = true;
 
     const currentVolume = volumeFill.offsetWidth / volumeBar.offsetWidth || 1;
     audio.volume = currentVolume;
-    audio.play();
 
-    if (!hasStarted) {
-        startAllAudio();
+    if (wasPlaying || activeAudios.size === 1) {
+        activeAudios.forEach(a => {
+            a.currentTime = 0;
+            a.play();
+            const img = document.querySelector(`.circle-img[data-audio="${a.id}"]`);
+            if (img) img.classList.add("active");
+        });
+    } else {
+        audio.currentTime = 0;
+        audio.play();
+        draggedItem.classList.add("active");
     }
+
+    hasStarted = true;
 }
 
 function stopAllAudio() {
@@ -76,21 +85,35 @@ function stopAllAudio() {
 
     activeAudios.clear();
     hasStarted = false;
+
+    draggables.forEach(item => {
+        item.classList.remove("active");
+    });
 }
 
 function playAllAudio() {
-    if (!hasStarted) {
-        startAllAudio();
-    } else {
-        allAudio.forEach(audio => {
-            audio.play();
-        });
+    activeAudios.forEach(audio => {
+        audio.play();
+    });
+
+    draggables.forEach(item => {
+        const audioId = item.dataset.audio;
+        const audio = document.querySelector(`#${audioId}`);
+    
+    if (activeAudios.has(audio)) {
+        item.classList.add("active");
     }
+});
+    hasStarted = true;
 }
 
 function pauseAllAudio() {
     allAudio.forEach(audio => {
         audio.pause();
+    });
+
+    draggables.forEach(item => {
+        item.classList.remove("active");
     });
 }
 
@@ -109,26 +132,22 @@ function setVolume(e) {
     });
 }
 
+function handleDragOver(e) {
+    e.preventDefault();
+}
+
 // EVENT LISTENERS
 
 draggables.forEach(item => {
-    item.addEventListener(`dragstart`, function () {
-        draggedItem = this;
-    });
+    item.addEventListener(`dragstart`, handleDragStart);
 });
 
 dropZones.forEach(zone => {
-    zone.addEventListener(`dragover`, function (e) {
-        e.preventDefault();
-    });
-
-    zone.addEventListener(`drop`, function () {
-        handleDrop(zone);
-    });
+    zone.addEventListener(`dragover`, handleDragOver);
+    zone.addEventListener(`drop`, handleZoneDrop);
 });
 
 stopBtn.addEventListener(`click`, stopAllAudio);
 playBtn.addEventListener(`click`, playAllAudio);
 pauseBtn.addEventListener(`click`, pauseAllAudio);
-
 volumeBar.addEventListener(`click`, setVolume);
